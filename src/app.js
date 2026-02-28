@@ -15,7 +15,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   process.env.FRONTEND_URL,
   ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [])
-].map(url => url.trim()).filter(Boolean);
+].filter(Boolean).map(url => url.trim());
 
 app.use(cors({
   origin: function (origin, callback) {
