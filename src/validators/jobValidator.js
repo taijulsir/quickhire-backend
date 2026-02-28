@@ -33,6 +33,16 @@ const jobValidation = [
     .withMessage('Invalid job type'),
   body('tags')
     .optional()
+    .customSanitizer(value => {
+      if (typeof value === 'string') {
+        try {
+          return JSON.parse(value);
+        } catch (e) {
+          return value.split(',').map(String).filter(Boolean);
+        }
+      }
+      return value;
+    })
     .isArray()
     .withMessage('Tags must be an array')
 ];

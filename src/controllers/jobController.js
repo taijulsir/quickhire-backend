@@ -26,7 +26,7 @@ const getAllJobs = async (req, res, next) => {
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
-    
+
     const [jobs, total] = await Promise.all([
       Job.find(query)
         .sort({ created_at: -1 })
@@ -52,7 +52,7 @@ const getAllJobs = async (req, res, next) => {
 const getJobById = async (req, res, next) => {
   try {
     const job = await Job.findById(req.params.id);
-    
+
     if (!job) {
       return sendResponse(res, 404, false, 'Job not found');
     }
@@ -66,7 +66,7 @@ const getJobById = async (req, res, next) => {
 const createJob = async (req, res, next) => {
   try {
     const jobData = { ...req.body };
-    
+
     if (req.file) {
       jobData.companyLogo = `/images/jobs/${req.file.filename}`;
     }
@@ -81,7 +81,7 @@ const createJob = async (req, res, next) => {
 const deleteJob = async (req, res, next) => {
   try {
     const job = await Job.findByIdAndDelete(req.params.id);
-    
+
     if (!job) {
       return sendResponse(res, 404, false, 'Job not found');
     }
@@ -134,10 +134,39 @@ const getJobCategories = async (req, res, next) => {
   }
 };
 
+const updateJob = async (req, res, next) => {
+  try {
+    const jobData = { ...req.body };
+
+    if (req.file) {
+      jobData.companyLogo = `/images/jobs/${req.file.filename}`;
+    }
+
+    if (jobData.tags && typeof jobData.tags === 'string') {
+      try {
+        jobData.tags = JSON.parse(jobData.tags);
+      } catch (e) {
+        jobData.tags = jobData.tags.split(',').map(tag => tag.trim());
+      }
+    }
+
+    const job = await Job.findByIdAndUpdate(req.params.id, jobData, { new: true });
+
+    if (!job) {
+      return sendResponse(res, 404, false, 'Job not found');
+    }
+
+    return sendResponse(res, 200, true, 'Job updated successfully', job);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   getAllJobs,
   getJobById,
   createJob,
+  updateJob,
   deleteJob,
   getFeaturedJobs,
   getLatestJobs,
