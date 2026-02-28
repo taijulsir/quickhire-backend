@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+import { body } from 'express-validator';
 
 const applicationValidation = [
   body('job_id')
@@ -32,4 +32,4 @@ const applicationValidation = [
     .withMessage('Cover note must be at least 10 characters')
 ];
 
-module.exports = applicationValidation;
+export default applicationValidation;

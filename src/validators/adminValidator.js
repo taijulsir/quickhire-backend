@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+import { body } from 'express-validator';
 
 const adminLoginValidation = [
   body('email')
@@ -12,4 +12,4 @@ const adminLoginValidation = [
     .withMessage('Password is required')
 ];
 
-module.exports = adminLoginValidation;
+export default adminLoginValidation;

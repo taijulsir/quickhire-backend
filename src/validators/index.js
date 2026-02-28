@@ -1,5 +1,9 @@
-const jobValidation = require('./jobValidator');
-const applicationValidation = require('./applicationValidator');
-const adminLoginValidation = require('./adminValidator');
+import jobValidation from './jobValidator.js';
+import applicationValidation from './applicationValidator.js';
+import adminLoginValidation from './adminValidator.js';
 
-module.exports = { jobValidation, applicationValidation, adminLoginValidation };
+export {
+  jobValidation,
+  applicationValidation,
+  adminLoginValidation
+};

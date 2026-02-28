@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+import { body } from 'express-validator';
 
 const jobValidation = [
   body('title')
@@ -37,4 +37,4 @@ const jobValidation = [
     .withMessage('Tags must be an array')
 ];
 
-module.exports = jobValidation;
+export default jobValidation;
