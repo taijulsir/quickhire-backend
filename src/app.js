@@ -13,7 +13,7 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:3000',
-  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : []),
+  process.env.FRONTEND_URL,
   ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [])
 ].map(url => url.trim()).filter(Boolean);
 
