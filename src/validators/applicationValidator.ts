@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 
-const applicationValidation = [
+const applicationValidation: ValidationChain[] = [
   body('job_id')
     .notEmpty()
     .withMessage('Job ID is required')
@@ -29,7 +29,7 @@ const applicationValidation = [
     .notEmpty()
     .withMessage('Cover note is required')
     .isLength({ min: 10 })
-    .withMessage('Cover note must be at least 10 characters')
+    .withMessage('Cover note must be at least 10 characters'),
 ];
 
 export default applicationValidation;

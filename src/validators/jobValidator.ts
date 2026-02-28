@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 
-const jobValidation = [
+const jobValidation: ValidationChain[] = [
   body('title')
     .trim()
     .notEmpty()
@@ -19,7 +19,16 @@ const jobValidation = [
     .trim()
     .notEmpty()
     .withMessage('Category is required')
-    .isIn(['Design', 'Sales', 'Marketing', 'Finance', 'Technology', 'Engineering', 'Business', 'Human Resource'])
+    .isIn([
+      'Design',
+      'Sales',
+      'Marketing',
+      'Finance',
+      'Technology',
+      'Engineering',
+      'Business',
+      'Human Resource',
+    ])
     .withMessage('Invalid category'),
   body('description')
     .trim()
@@ -33,18 +42,18 @@ const jobValidation = [
     .withMessage('Invalid job type'),
   body('tags')
     .optional()
-    .customSanitizer(value => {
+    .customSanitizer((value: unknown) => {
       if (typeof value === 'string') {
         try {
           return JSON.parse(value);
-        } catch (e) {
-          return value.split(',').map(String).filter(Boolean);
+        } catch {
+          return (value as string).split(',').map(String).filter(Boolean);
         }
       }
       return value;
     })
     .isArray()
-    .withMessage('Tags must be an array')
+    .withMessage('Tags must be an array'),
 ];
 
 export default jobValidation;

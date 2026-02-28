@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 
-const adminLoginValidation = [
+const adminLoginValidation: ValidationChain[] = [
   body('email')
     .trim()
     .notEmpty()
@@ -9,7 +9,7 @@ const adminLoginValidation = [
     .withMessage('Please provide a valid email'),
   body('password')
     .notEmpty()
-    .withMessage('Password is required')
+    .withMessage('Password is required'),
 ];
 
 export default adminLoginValidation;
