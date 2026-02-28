@@ -4,10 +4,4 @@ import validate from './validate.js';
 import upload from './upload.js';
 import requestLogger from './requestLogger.js';
 
-export {
-  errorHandler,
-  authMiddleware,
-  validate,
-  upload,
-  requestLogger
-};
+export { errorHandler, authMiddleware, validate, upload, requestLogger };
