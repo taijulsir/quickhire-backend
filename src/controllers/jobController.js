@@ -1,5 +1,5 @@
-const { Job } = require('../models');
-const { sendResponse } = require('../utils/response');
+import { Job } from '../models/index.js';
+import { sendResponse } from '../utils/response.js';
 
 const getAllJobs = async (req, res, next) => {
   try {
@@ -65,7 +65,13 @@ const getJobById = async (req, res, next) => {
 
 const createJob = async (req, res, next) => {
   try {
-    const job = await Job.create(req.body);
+    const jobData = { ...req.body };
+    
+    if (req.file) {
+      jobData.companyLogo = `/images/jobs/${req.file.filename}`;
+    }
+
+    const job = await Job.create(jobData);
     return sendResponse(res, 201, true, 'Job created successfully', job);
   } catch (error) {
     next(error);
@@ -128,7 +134,7 @@ const getJobCategories = async (req, res, next) => {
   }
 };
 
-module.exports = {
+export {
   getAllJobs,
   getJobById,
   createJob,

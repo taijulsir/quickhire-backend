@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const { generateToken } = require('../utils/jwt');
-const { sendResponse } = require('../utils/response');
+import bcrypt from 'bcryptjs';
+import { generateToken } from '../utils/jwt.js';
+import { sendResponse } from '../utils/response.js';
 
 const login = async (req, res, next) => {
   try {
@@ -48,4 +48,8 @@ const checkAuth = async (req, res, next) => {
   }
 };
 
-module.exports = { login, logout, checkAuth };
+export {
+  login,
+  logout,
+  checkAuth
+};

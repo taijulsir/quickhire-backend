@@ -1,5 +1,9 @@
-const jobController = require('./jobController');
-const applicationController = require('./applicationController');
-const adminController = require('./adminController');
+import * as jobController from './jobController.js';
+import * as applicationController from './applicationController.js';
+import * as adminController from './adminController.js';
 
-module.exports = { jobController, applicationController, adminController };
+export {
+  jobController,
+  applicationController,
+  adminController
+};

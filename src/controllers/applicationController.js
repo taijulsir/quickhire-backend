@@ -1,5 +1,5 @@
-const { Application, Job } = require('../models');
-const { sendResponse } = require('../utils/response');
+import { Application, Job } from '../models/index.js';
+import { sendResponse } from '../utils/response.js';
 
 const createApplication = async (req, res, next) => {
   try {
@@ -47,7 +47,7 @@ const getAllApplications = async (req, res, next) => {
   }
 };
 
-module.exports = {
+export {
   createApplication,
   getApplicationsByJob,
   getAllApplications
