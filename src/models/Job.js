@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const jobSchema = new mongoose.Schema({
   title: {
@@ -44,4 +44,4 @@ const jobSchema = new mongoose.Schema({
 
 jobSchema.index({ title: 'text', company: 'text', description: 'text' });
 
-module.exports = mongoose.model('Job', jobSchema);
+export default mongoose.model('Job', jobSchema);

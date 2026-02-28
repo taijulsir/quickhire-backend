@@ -1,4 +1,7 @@
-const Job = require('./Job');
-const Application = require('./Application');
+import Job from './Job.js';
+import Application from './Application.js';
 
-module.exports = { Job, Application };
+export {
+  Job,
+  Application
+};
