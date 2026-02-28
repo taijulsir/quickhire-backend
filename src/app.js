@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+dotenv.config();
 import path from 'path';
 import { fileURLToPath } from 'url';
 import logger from './utils/logger.js';
