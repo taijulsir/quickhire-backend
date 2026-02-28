@@ -10,8 +10,14 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, '../../public/images/jobs'));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+    const originalName = path.parse(file.originalname).name;
+    const slug = originalName
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E4);
+    cb(null, `${slug}-${uniqueSuffix}${path.extname(file.originalname)}`);
   }
 });
 
