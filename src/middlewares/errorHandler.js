@@ -1,4 +1,4 @@
-const { sendResponse } = require('../utils/response');
+import { sendResponse } from '../utils/response.js';
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
@@ -19,4 +19,4 @@ const errorHandler = (err, req, res, next) => {
   return sendResponse(res, err.statusCode || 500, false, err.message || 'Server Error');
 };
 
-module.exports = errorHandler;
+export default errorHandler;

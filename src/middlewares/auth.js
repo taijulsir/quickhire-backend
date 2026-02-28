@@ -1,5 +1,5 @@
-const { verifyToken } = require('../utils/jwt');
-const { sendResponse } = require('../utils/response');
+import { verifyToken } from '../utils/jwt.js';
+import { sendResponse } from '../utils/response.js';
 
 const authMiddleware = (req, res, next) => {
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
@@ -17,4 +17,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware;

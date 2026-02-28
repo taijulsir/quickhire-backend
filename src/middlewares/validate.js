@@ -1,5 +1,5 @@
-const { validationResult } = require('express-validator');
-const { sendResponse } = require('../utils/response');
+import { validationResult } from 'express-validator';
+import { sendResponse } from '../utils/response.js';
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -10,4 +10,4 @@ const validate = (req, res, next) => {
   next();
 };
 
-module.exports = validate;
+export default validate;
