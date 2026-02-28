@@ -32,6 +32,7 @@ const jobSchema = new mongoose.Schema({
   },
   tags: [{
     type: String,
+    enum: ['Design', 'Sales', 'Marketing', 'Finance', 'Technology', 'Engineering', 'Business', 'Human Resource'],
     trim: true
   }],
   companyLogo: {
