@@ -1,7 +1,8 @@
 import { sendResponse } from '../utils/response.js';
+import logger from '../utils/logger.js';
 
 const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
+  logger.error(err);
 
   if (err.name === 'ValidationError') {
     const messages = Object.values(err.errors).map(val => val.message);

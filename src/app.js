@@ -3,28 +3,35 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { errorHandler } from './middlewares/index.js';
+import logger from './utils/logger.js';
+import { errorHandler, requestLogger } from './middlewares/index.js';
 import { jobRoutes, applicationRoutes, adminRoutes } from './routes/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 const app = express();
+
+app.use(requestLogger);
 
 const allowedOrigins = [
   'http://localhost:3000',
   process.env.FRONTEND_URL,
   ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [])
-].filter(Boolean).map(url => url.trim());
+].filter(Boolean).map(url => url.trim().replace(/\/$/, ''));
 
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
+    const normalizedOrigin = origin.replace(/\/$/, '');
+
+    if (allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
+      logger.error(`CORS blocked for origin: ${origin}. Allowed: ${allowedOrigins.join(', ')}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
