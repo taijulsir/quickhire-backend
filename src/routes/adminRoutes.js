@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { adminController } = require('../controllers');
-const { authMiddleware, validate } = require('../middlewares');
-const { adminLoginValidation } = require('../validators');
+import { adminController } from '../controllers/index.js';
+import { authMiddleware, validate } from '../middlewares/index.js';
+import { adminLoginValidation } from '../validators/index.js';
 
 router.post('/login', adminLoginValidation, validate, adminController.login);
 router.post('/logout', adminController.logout);
 router.get('/check', authMiddleware, adminController.checkAuth);
 
-module.exports = router;
+export default router;

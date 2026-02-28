@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { applicationController } = require('../controllers');
-const { authMiddleware, validate } = require('../middlewares');
-const { applicationValidation } = require('../validators');
+import { applicationController } from '../controllers/index.js';
+import { authMiddleware, validate } from '../middlewares/index.js';
+import { applicationValidation } from '../validators/index.js';
 
 router.post('/', applicationValidation, validate, applicationController.createApplication);
 router.get('/', authMiddleware, applicationController.getAllApplications);
 router.get('/job/:jobId', authMiddleware, applicationController.getApplicationsByJob);
 
-module.exports = router;
+export default router;

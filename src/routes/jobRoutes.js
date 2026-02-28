@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { jobController } = require('../controllers');
-const { authMiddleware, validate } = require('../middlewares');
-const { jobValidation } = require('../validators');
+import { jobController } from '../controllers/index.js';
+import { authMiddleware, validate, upload } from '../middlewares/index.js';
+import { jobValidation } from '../validators/index.js';
 
 router.get('/', jobController.getAllJobs);
 router.get('/featured', jobController.getFeaturedJobs);
@@ -10,7 +10,7 @@ router.get('/latest', jobController.getLatestJobs);
 router.get('/categories', jobController.getJobCategories);
 router.get('/:id', jobController.getJobById);
 
-router.post('/', authMiddleware, jobValidation, validate, jobController.createJob);
+router.post('/', authMiddleware, upload.single('companyLogo'), jobValidation, validate, jobController.createJob);
 router.delete('/:id', authMiddleware, jobController.deleteJob);
 
-module.exports = router;
+export default router;

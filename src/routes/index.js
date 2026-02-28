@@ -1,5 +1,9 @@
-const jobRoutes = require('./jobRoutes');
-const applicationRoutes = require('./applicationRoutes');
-const adminRoutes = require('./adminRoutes');
+import jobRoutes from './jobRoutes.js';
+import applicationRoutes from './applicationRoutes.js';
+import adminRoutes from './adminRoutes.js';
 
-module.exports = { jobRoutes, applicationRoutes, adminRoutes };
+export {
+  jobRoutes,
+  applicationRoutes,
+  adminRoutes
+};
