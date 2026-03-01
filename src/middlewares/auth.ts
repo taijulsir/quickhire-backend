@@ -3,11 +3,14 @@ import { verifyToken } from '../utils/jwt.js';
 import { sendResponse } from '../utils/response.js';
 
 export interface AuthRequest extends Request {
-  admin?: Record<string, unknown>;
+  user?: {
+    id: string;
+    role: string;
+  };
 }
 
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+  const token = req.cookies?.token;
 
   if (!token) {
     sendResponse(res, 401, false, 'Access denied. No token provided');
@@ -16,10 +19,11 @@ const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): vo
 
   try {
     const decoded = verifyToken(token);
-    req.admin = decoded as Record<string, unknown>;
+    req.user = { id: decoded.id as string, role: decoded.role as string };
     next();
-  } catch {
-    sendResponse(res, 401, false, 'Invalid or expired token');
+  } catch (err) {
+    const isExpired = err instanceof Error && err.name === 'TokenExpiredError';
+    sendResponse(res, 401, false, isExpired ? 'Token expired' : 'Invalid token');
   }
 };
 

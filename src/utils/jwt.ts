@@ -1,12 +1,15 @@
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
 
-export const generateToken = (payload: object): string => {
-  const options: SignOptions = {
-    expiresIn: process.env.JWT_EXPIRES_IN as string as unknown as SignOptions['expiresIn'],
-  };
+export interface TokenPayload {
+  id: string;
+  role: string;
+}
+
+export const generateToken = (payload: TokenPayload): string => {
+  const options: SignOptions = { expiresIn: '7d' };
   return jwt.sign(payload, process.env.JWT_SECRET as string, options);
 };
 
-export const verifyToken = (token: string): JwtPayload | string => {
-  return jwt.verify(token, process.env.JWT_SECRET as string);
+export const verifyToken = (token: string): JwtPayload => {
+  return jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
 };

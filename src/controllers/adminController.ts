@@ -4,6 +4,15 @@ import { sendResponse } from '../utils/response.js';
 import { Job, Application } from '../models/index.js';
 import { AuthRequest } from '../middlewares/auth.js';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 export const login = async (
   req: AuthRequest,
   res: Response,
@@ -19,16 +28,13 @@ export const login = async (
       return;
     }
 
-    const token = generateToken({ email: adminEmail, role: 'admin' });
+    const token = generateToken({ id: adminEmail as string, role: 'admin' });
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+    res.cookie('token', token, COOKIE_OPTIONS);
+
+    sendResponse(res, 200, true, 'Login successful', {
+      user: { id: adminEmail, email: adminEmail, role: 'admin' },
     });
-
-    sendResponse(res, 200, true, 'Login successful', { token });
   } catch (error) {
     next(error);
   }
@@ -40,11 +46,10 @@ export const logout = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    res.cookie('token', '', {
+    res.clearCookie('token', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      expires: new Date(0),
+      secure: isProduction,
+      sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax',
     });
 
     sendResponse(res, 200, true, 'Logout successful');
@@ -59,7 +64,7 @@ export const checkAuth = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    sendResponse(res, 200, true, 'Authenticated', { admin: req.admin });
+    sendResponse(res, 200, true, 'Authenticated', { user: req.user });
   } catch (error) {
     next(error);
   }
