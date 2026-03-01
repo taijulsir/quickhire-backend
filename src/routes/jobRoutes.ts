@@ -19,7 +19,7 @@ router.post(
   validate,
   jobController.createJob
 );
-router.put(
+router.patch(
   '/:id',
   authMiddleware,
   upload.single('companyLogo'),

@@ -119,7 +119,7 @@ export const updateJob = async (
     }
 
     const job = await Job.findByIdAndUpdate(req.params.id, jobData, {
-      new: true,
+      returnDocument: 'after',
     });
 
     if (!job) {
@@ -203,6 +203,70 @@ export const getJobCategories = async (
       'Categories fetched successfully',
       formattedCategories
     );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const searchJobs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { q } = req.query;
+
+    if (!q || !(q as string).trim()) {
+      res.json([]);
+      return;
+    }
+
+    const jobs = await Job.find({
+      $or: [
+        { title: { $regex: q, $options: 'i' } },
+        { company: { $regex: q, $options: 'i' } },
+      ],
+    } as JobQuery)
+      .sort({ created_at: -1 })
+      .limit(6)
+      .select('title company location companyLogo created_at');
+
+    const now = new Date();
+    const results = jobs.map((job) => {
+      const diffMs = now.getTime() - new Date(job.created_at).getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      let time: string;
+      if (diffDays === 0) time = 'Today';
+      else if (diffDays === 1) time = '1 day ago';
+      else if (diffDays < 7) time = `${diffDays} days ago`;
+      else if (diffDays < 30) time = `${Math.floor(diffDays / 7)}w ago`;
+      else time = `${Math.floor(diffDays / 30)}mo ago`;
+
+      return {
+        _id: job._id,
+        jobName: job.title,
+        companyName: job.company,
+        location: job.location,
+        logo: job.companyLogo || '',
+        time,
+      };
+    });
+
+    res.json(results);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getLocations = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const locations = await Job.distinct('location');
+    const sorted = locations.filter(Boolean).sort();
+    res.json(sorted);
   } catch (error) {
     next(error);
   }
